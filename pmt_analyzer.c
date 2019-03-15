@@ -244,6 +244,12 @@ float pmt_analyzer(int runNum, float initialSig = -1.0, int run2 = 0, int run3 =
 	printf("### for runs_with_signal.csv\n");
 	printf("%d,%.2f,%.2f,%.2f,%.6f,%.6f\n\n", runNum, pedout, sigout, nPE, sigrmsout / sigout, muout);
 
+//	ofstream myfile("quartz_output.csv", ios::out | ios::app);
+//	if (myfile.is_open()) {
+//		myfile << Form("%d,%.2f,%.2f,%.2f,%.6f,%.6f", runNum, pedout, sigout, nPE, sigrmsout / sigout, muout) << endl;
+//		myfile.close();
+//	}
+
 	return nPE;
 }
 

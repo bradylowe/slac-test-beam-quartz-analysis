@@ -183,6 +183,12 @@ float pmt_analyzer_stack(int runNum, float initialSig = -1.0, int low = 0, int h
 	printf("Sig: %.5f +/- %.5f\n", sigout, sigrmsout);
 	printf("#PEs: %.5f +/- %.5f\n", nPE, sigrmsout / onePEsig);
 	printf("Resolution: %.5f\n", sigrmsout / sigout);
+
+//	ofstream myfile("stack_output.csv", ios::out | ios::app);
+//	if (myfile.is_open()) {
+//		myfile << Form("%d,%.2f,%.2f,%.2f,%.6f", runNum, pedout, sigout, nPE, sigrmsout / sigout) << endl;
+//		myfile.close();
+//	}
 	
 	return nPE;
 }

@@ -127,6 +127,12 @@ float pmt_analyzer_pedestal(int runNum, float initialPed = -1.0, int low = 0, in
 	//printf("Detector:  %s\n", detector.c_str());
 	//printf("Energy:  %.1f\n", energy);
 	printf("Ped: %.5f +/- %.5f\n", pedout, pedrmsout);
+
+//	ofstream myfile("pedestal_output.csv", ios::out | ios::app);
+//	if (myfile.is_open()) {
+//		myfile << Form("%d,%.2f,%.2f", runNum, pedout, pedrmsout) << endl;
+//		myfile.close();
+//	}
 	
 	return pedout;
 }

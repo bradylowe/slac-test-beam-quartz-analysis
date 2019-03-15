@@ -398,6 +398,12 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 
 	printf("%s", printString.c_str());
 
+//	ofstream myfile("tandem_output.csv", ios::out | ios::app);
+//	if (myfile.is_open()) {
+//		myfile << Form("%d,%.2f,%.2f,%.2f,%.6f", runNum, pedout, nPE_upstream, nPE_downstream, muout) << endl;
+//		myfile.close();
+//	}
+
 	return nPE_upstream;
 }
 
