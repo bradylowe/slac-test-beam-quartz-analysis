@@ -84,6 +84,7 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	TF1 *fis_from_fit_bg;
 	TF1 *fit_func;
 	Double_t chi, integral_width, this_pe_mean, wout, pedout, pedrmsout, alphaout, muout, sigout, sigrmsout, injout, realout, wouterr, pedouterr, pedrmsouterr, alphaouterr, muouterr, sigouterr, sigrmsouterr, injouterr, realouterr;
+	Double_t ped_upstream, ped_downstream, sig_upstream, sig_downstream, sig_rms_upstream, sig_rms_downstream, mu_upstream, mu_downstream;
 	Int_t hv = GetHvFromRun(runNum);
 	// Grab gain conversion factors for pmts and hv's used
 	float onePEsig_upstream = GetSignalFromPmtAndHV(pmt_upstream, hv);
@@ -221,6 +222,11 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	injouterr = fit_func->GetParError(7);
 	realouterr = fit_func->GetParError(8);
 	nPE_upstream = sigout / onePEsig_upstream;
+
+	ped_upstream = pedout;
+	sig_upstream = sigout;
+	sig_rms_upstream = sigrmsout;
+	mu_upstream = muout;
 
 	// Print out results and a copy of all inputs to check them
 	printString = "\n\n=============================\nUPSTREAM ANALYSIS\n---------------------------\n";
@@ -372,6 +378,11 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	realouterr = fit_func->GetParError(8);
 	nPE_downstream = sigout / onePEsig_downstream;
 
+	ped_downstream = pedout;
+	sig_downstream = sigout;
+	sig_rms_downstream = sigrmsout;
+	mu_downstream = muout;
+
 	// Print out results and a copy of all inputs to check them
 	printString += "=============================\nDOWNSTREAM ANALYSIS\n---------------------------\n";
 	printString += "Run:  " + std::to_string(runNum) + "\n";
@@ -400,9 +411,11 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 
 //	ofstream myfile("tandem_output.csv", ios::out | ios::app);
 //	if (myfile.is_open()) {
-//		myfile << Form("%d,%.2f,%.2f,%.2f,%.6f", runNum, pedout, nPE_upstream, nPE_downstream, muout) << endl;
+//		myfile << Form("%d,%.2f,%.2f,%.6f,%.2f,%.6f,%.2f,%.2f,%.6f,%.2f,%.6f", runNum, ped_upstream, sig_upstream, sig_rms_upstream / sig_upstream, nPE_upstream, mu_upstream, ped_downstream, sig_downstream, sig_rms_downstream / sig_downstream, nPE_downstream, mu_downstream) << endl;
 //		myfile.close();
 //	}
+
+//	can->Print(Form("tandem_%d.png", runNum));
 
 	return nPE_upstream;
 }
