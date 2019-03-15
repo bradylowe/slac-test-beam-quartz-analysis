@@ -34,7 +34,7 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 
 	// Define histogram numbers
 	Int_t binWidth = 1;
-	const int MAX_BIN = 4096;
+	const int MAX_BIN = 4095;
 	int adc_range = 1;
 
 	// Define ADC channels used and which PMTs
@@ -195,6 +195,7 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
         fis_from_fit_bg->SetNpx(2000);
 	fis_from_fit_bg->Draw("same");
 	can->Update();
+can->Print(Form("tandem_%d.png", runNum));
 
 	// Grab some stats info from the fit
 	chi = fit_func->GetChisquare();

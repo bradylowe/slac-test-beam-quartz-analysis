@@ -35,7 +35,7 @@ float pmt_analyzer(int runNum, float initialSig = -1.0, int run2 = 0, int run3 =
 
 	// Define histogram numbers
 	Int_t binWidth = 1;
-	const int MAX_BIN = 4096;
+	const int MAX_BIN = 4095;
 	int adc_range = 1;
 
 	// Grab initial values from csv files or use defaults
@@ -74,7 +74,6 @@ float pmt_analyzer(int runNum, float initialSig = -1.0, int run2 = 0, int run3 =
 	// Grab fit bounds from user-defined thresholds
 	Int_t low = h_QDC->FindFirstBinAbove(2) * binWidth - 20;
 	Int_t high = h_QDC->FindLastBinAbove(2) * binWidth + 20;
-	printf("range: %d, %d\n", low, high);
 	
 	// If we are overflowing, just don't even run the fit
 	if (high >= MAX_BIN) return -2.0; 
@@ -177,6 +176,7 @@ float pmt_analyzer(int runNum, float initialSig = -1.0, int run2 = 0, int run3 =
         fis_from_fit_bg->SetNpx(2000);
 	fis_from_fit_bg->Draw("same");
 	can->Update();
+can->Print(Form("quartz_%d.png", runNum));
 
 	// Grab some stats info from the fit
 	Double_t chi = fit_func->GetChisquare();
@@ -212,6 +212,7 @@ float pmt_analyzer(int runNum, float initialSig = -1.0, int run2 = 0, int run3 =
 	// Print out results and a copy of all inputs to check them
 	//printf("Run: %s\n", rootFile.c_str());
 	printf("Run:  %d\n", runNum);
+	printf("Range: %d, %d\n", low, high);
 	printf("HV:  %d\n", hv);
 	printf("PMT: %d\n", pmt);
 	//printf("Detector:  %s\n", detector.c_str());
