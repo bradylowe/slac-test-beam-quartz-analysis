@@ -98,7 +98,6 @@ float pmt_analyzer_pedestal(int runNum, float initialPed = -1.0, int low = 0, in
 	// Define results pointer 
 	TFitResultPtr ped_res = h_QDC->Fit(ped_func, "RS", "", low, high);
 	can->Update();
-can->Print(Form("pedestal_%d.png", runNum));
 
 	// Create vector and grab return parameters
 	Double_t ped_back[3];

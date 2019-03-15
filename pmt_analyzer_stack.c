@@ -139,7 +139,6 @@ float pmt_analyzer_stack(int runNum, float initialSig = -1.0, int low = 0, int h
 	TFitResultPtr ped_res = h_QDC->Fit(ped_func, "RS", "", low, initialPed + 40.0);
 	TFitResultPtr sig_res = h_QDC->Fit(sig_func, "RS", "", initialPed + 40.0, high);
 	can->Update();
-can->Print(Form("stack_%d.png", runNum));
 
 	// Create vector and grab return parameters
 	Double_t ped_back[3];
