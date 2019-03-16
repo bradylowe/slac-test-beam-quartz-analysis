@@ -38,15 +38,15 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	int adc_range = 1;
 
 	// Define ADC channels used and which PMTs
-	int chanUpstream = 2;
-	int chanDownstream = 0;
+	int chanUpstream = 0;
+	int chanDownstream = 2;
 	Int_t pmt_upstream = GetPmtFromRun(runNum);
 	Int_t pmt_downstream = 2;
 	if (pmt_upstream == 2) pmt_downstream = 1;
         
 	// Grab initial values from csv files or use defaults
 	Float_t initialMu = 1.0;
-        Float_t initialPed = (float)(GetPedestalFromRun(runNum));
+        Float_t initialPed = 1268.0;
         if (initialSigUpstream < 0.0) initialSigUpstream = (float)(GetSignalFromRun(runNum));
         if (initialSigDownstream < 0.0) initialSigDownstream = (float)(GetDownstreamSignalFromRun(runNum));
         Float_t initialSigRmsUpstream = (float)(GetSignalRmsFromRun(runNum));
@@ -106,6 +106,7 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	can->cd(1);
 	// Grab fit bounds from user-defined thresholds
 	low = qdc_upstream->FindFirstBinAbove(150) * binWidth - 20;
+	if (low < initialPed - 50) low = initialPed - 50;
 	high = qdc_upstream->FindLastBinAbove(2) * binWidth + 20;
 	printf("range: %d, %d\n", low, high);
 	
@@ -158,6 +159,7 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	fit_func->SetParLimits(7, 0.0, 1.0); // inj
 	fit_func->SetParLimits(8, 0.0, 1.0); // real
 	fit_func->SetParLimits(1, initialPed - 5.0, initialPed + 5.0);
+	fit_func->SetParLimits(4, 0.0, 2.0);
 	fit_func->SetParLimits(5, initialSigUpstream * 0.8, initialSigUpstream * 1.2);
 	fit_func->SetParLimits(6, initialSigRmsUpstream * 0.8, initialSigRmsUpstream * 1.2);
 
@@ -257,8 +259,10 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	////////////////////////////////////////////////////////
 
 	can->cd(2);
+	initialPed = 1298;
 	// Grab fit bounds from user-defined thresholds
 	low = qdc_downstream->FindFirstBinAbove(150) * binWidth - 20;
+	if (low < initialPed - 50) low = initialPed - 50;
 	high = qdc_downstream->FindLastBinAbove(2) * binWidth + 20;
 	printf("range: %d, %d\n", low, high);
 	
@@ -273,7 +277,6 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
                 qdc_downstream->SetBinError(curBin, sqrt(curVal) / (sum * (float)(binWidth)));
         }
 
-	initialPed = 1268;
 
 	// Define fitting function
 	fit_func=new TF1("fit_func", the_real_deal_yx, 0, MAX_BIN, 11); 
@@ -313,6 +316,7 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	fit_func->SetParLimits(7, 0.0, 1.0); // inj
 	fit_func->SetParLimits(8, 0.0, 1.0); // real
 	fit_func->SetParLimits(1, initialPed - 5.0, initialPed + 5.0);
+	fit_func->SetParLimits(4, 0.0, 2.0);
 	fit_func->SetParLimits(5, initialSigDownstream * 0.8, initialSigDownstream * 1.2);
 	fit_func->SetParLimits(6, initialSigRmsDownstream * 0.8, initialSigRmsDownstream * 1.2);
 
