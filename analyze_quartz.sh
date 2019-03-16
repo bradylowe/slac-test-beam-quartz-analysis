@@ -2,7 +2,7 @@
 if [ $# -gt 0 ] ; then
 	run_list=$*
 else
-	run_list=$(more +9 values_by_run.csv | awk -F',' '{print $1}')
+	run_list=$(more +8 values_by_run.csv | awk -F',' '{print $1}')
 fi
 
 for run_num in ${run_list} ; do
