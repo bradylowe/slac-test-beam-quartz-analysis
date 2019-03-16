@@ -73,6 +73,7 @@ float pmt_analyzer(int runNum, float initialSig = -1.0, int run2 = 0, int run3 =
 
 	// Grab fit bounds from user-defined thresholds
 	Int_t low = h_QDC->FindFirstBinAbove(2) * binWidth - 20;
+	if (low < initialPed - 50) low = initialPed - 50;
 	Int_t high = h_QDC->FindLastBinAbove(2) * binWidth + 20;
 	
 	// If we are overflowing, just don't even run the fit
@@ -243,6 +244,7 @@ float pmt_analyzer(int runNum, float initialSig = -1.0, int run2 = 0, int run3 =
 
 	printf("### for runs_with_signal.csv\n");
 	printf("%d,%.2f,%.2f,%.2f,%.6f,%.6f\n\n", runNum, pedout, sigout, nPE, sigrmsout / sigout, muout);
+        h_QDC->SetTitle(Form("nPE = %.2f", nPE));
 
 //	ofstream myfile("quartz_output.csv", ios::out | ios::app);
 //	if (myfile.is_open()) {

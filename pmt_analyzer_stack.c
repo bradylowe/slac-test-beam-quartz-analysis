@@ -30,8 +30,7 @@ double poisson_peak_calculator(int n, double mu){
 
 // This function reads the PMT root file from a hard-coded directory and fits the distribution
 // to a Poisson convoluted with some gaussians and an exponential.
-float pmt_analyzer_stack(int runNum, float initialSig = -1.0, int low = 0, int high = 0, int run2 = 0, int run3 = 0, int run4 = 0, int run5 = 0,
-						int run6 = 0, int run7 = 0, int run8 = 0, int run9 = 0, int run10 = 0){
+float pmt_analyzer_stack(int runNum, float initialSig = -1.0, int fit_low = 0, int fit_high = 0, int run2 = 0, int run3 = 0, int run4 = 0, int run5 = 0, int run6 = 0, int run7 = 0, int run8 = 0, int run9 = 0, int run10 = 0){
 
 	// Define histogram numbers
 	Int_t binWidth = 1;
@@ -48,8 +47,14 @@ float pmt_analyzer_stack(int runNum, float initialSig = -1.0, int low = 0, int h
 	}
 	if (initialSig < 0.0) initialSig = 155.0;
 	if (initialSigRms < 0.0) initialSigRms = sqrt(initialSig);
-	if (low == 0) low = GetLowFromRun(runNum);
-	if (high == 0) high = GetHighFromRun(runNum);
+	if (fit_low <= 0) {
+		fit_low = (initialPed + initialSig) - initialSigRms * 2.5;
+		if (fit_low < initialPed + 5) fit_low = initialPed + 5;
+	}
+	if (fit_high <= 0) {
+		fit_high = (initialPed + initialSig) + initialSigRms * 2.5;
+		if (fit_high >= 3500) fit_high = 3500;
+	}
 /*
 	// Update bin width depending on signal size and rms
 	if (initialSig > 100.0 || initialSigRms > 35.0) binWidth = 2;
@@ -70,8 +75,8 @@ float pmt_analyzer_stack(int runNum, float initialSig = -1.0, int low = 0, int h
 	else printf("Total entries: %d\n", nentries);
 
 	// Grab fit bounds from user-defined thresholds
-	if (low == 0) low = h_QDC->FindFirstBinAbove(2) * binWidth - 20;
-	if (high == 0) high = h_QDC->FindLastBinAbove(2) * binWidth + 20;
+	Int_t low = h_QDC->FindFirstBinAbove(2) * binWidth - 20;
+	Int_t high = h_QDC->FindLastBinAbove(2) * binWidth + 20;
 	
 	// If we are overflowing, just don't even run the fit
 	if (high >= MAX_BIN) return -2.0; 
@@ -87,7 +92,7 @@ float pmt_analyzer_stack(int runNum, float initialSig = -1.0, int low = 0, int h
 	//h_QDC->Fit(fit_gaus_ped, "RN", "");
 
 	// Define fitting function
-	TF1 *ped_func=new TF1("ped_func", "gaus", low, initialPed + 120.0); 
+	TF1 *ped_func=new TF1("ped_func", "gaus", low, initialPed + 20.0); 
 	ped_func->SetLineColor(4); // Dark blue
 	ped_func->SetNpx(2000);
 	ped_func->SetLineWidth(2);
@@ -95,7 +100,7 @@ float pmt_analyzer_stack(int runNum, float initialSig = -1.0, int low = 0, int h
 	ped_func->SetParName(1, "Q0");
 	ped_func->SetParName(2, "S0");
 
-	TF1 *sig_func=new TF1("sig_func", "gaus", initialPed + 120.0, high); 
+	TF1 *sig_func=new TF1("sig_func", "gaus", fit_low, fit_high); 
 	sig_func->SetLineColor(3); 
 	sig_func->SetNpx(2000);
 	sig_func->SetLineWidth(2);
@@ -113,8 +118,8 @@ float pmt_analyzer_stack(int runNum, float initialSig = -1.0, int low = 0, int h
 	
 	// Set bounds on parameters where necessary
 	ped_func->SetParLimits(1, initialPed - 5.0, initialPed + 5.0);
-	sig_func->SetParLimits(1, (initialPed + initialSig) * 0.8, (initialPed + initialSig) * 1.2);
-	sig_func->SetParLimits(2, initialSigRms * 0.8, initialSigRms * 1.2);
+	sig_func->SetParLimits(1, (initialPed + initialSig) * 0.9, (initialPed + initialSig) * 1.1);
+	sig_func->SetParLimits(2, initialSigRms * 0.9, initialSigRms * 1.1);
 
 	// Setup histogram for printing
         h_QDC->GetXaxis()->SetTitle("ADC channels");
@@ -136,8 +141,8 @@ float pmt_analyzer_stack(int runNum, float initialSig = -1.0, int low = 0, int h
 	can->SetLogy();
 
 	// Define results pointer 
-	TFitResultPtr ped_res = h_QDC->Fit(ped_func, "RS", "", low, initialPed + 40.0);
-	TFitResultPtr sig_res = h_QDC->Fit(sig_func, "RS", "", initialPed + 40.0, high);
+	TFitResultPtr ped_res = h_QDC->Fit(ped_func, "RS", "", low, initialPed + 20.0);
+	TFitResultPtr sig_res = h_QDC->Fit(sig_func, "RS", "", fit_low, fit_high);
 	can->Update();
 
 	// Create vector and grab return parameters
@@ -175,6 +180,7 @@ float pmt_analyzer_stack(int runNum, float initialSig = -1.0, int low = 0, int h
 	//printf("Run: %s\n", rootFile.c_str());
 	printf("Run:  %d\n", runNum);
 	printf("Range: %d, %d\n", low, high);
+	printf("Signal range: %d, %d\n", fit_low, fit_high);
 	printf("HV:  %d\n", hv);
 	printf("PMT: %d\n", pmt);
 	//printf("Detector:  %s\n", detector.c_str());
@@ -189,6 +195,9 @@ float pmt_analyzer_stack(int runNum, float initialSig = -1.0, int low = 0, int h
 //		myfile << Form("%d,%.2f,%.2f,%.2f,%.6f", runNum, pedout, sigout, nPE, sigrmsout / sigout) << endl;
 //		myfile.close();
 //	}
+
+        h_QDC->SetTitle(Form("nPE = %.2f", nPE));
+//	can->Print(Form("stack_%d.png", runNum));
 	
 	return nPE;
 }
