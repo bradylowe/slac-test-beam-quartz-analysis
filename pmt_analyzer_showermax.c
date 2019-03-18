@@ -30,7 +30,7 @@ double poisson_peak_calculator(int n, double mu){
 
 // This function reads the PMT root file from a hard-coded directory and fits the distribution
 // to a Poisson convoluted with some gaussians and an exponential.
-float pmt_analyzer(int runNum, float initialSig = -1.0, int run2 = 0, int run3 = 0, int run4 = 0, int run5 = 0,
+float pmt_analyzer_showermax(int runNum, float initialSig = -1.0, int run2 = 0, int run3 = 0, int run4 = 0, int run5 = 0,
 						int run6 = 0, int run7 = 0, int run8 = 0, int run9 = 0, int run10 = 0){
 
 	// Define histogram numbers
@@ -246,11 +246,13 @@ float pmt_analyzer(int runNum, float initialSig = -1.0, int run2 = 0, int run3 =
 	printf("%d,%.2f,%.2f,%.2f,%.6f,%.6f\n\n", runNum, pedout, sigout, nPE, sigrmsout / sigout, muout);
         h_QDC->SetTitle(Form("nPE = %.2f", nPE));
 
-//	ofstream myfile("quartz_output.csv", ios::out | ios::app);
+//	ofstream myfile("showermax_output.csv", ios::out | ios::app);
 //	if (myfile.is_open()) {
 //		myfile << Form("%d,%.2f,%.2f,%.2f,%.6f,%.6f", runNum, pedout, sigout, nPE, sigrmsout / sigout, muout) << endl;
 //		myfile.close();
 //	}
+	
+	can->Print(Form("showermax_%d.png", runNum));
 
 	return nPE;
 }

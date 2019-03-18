@@ -1,7 +1,7 @@
 TANDEM DATA:  run;hv;pmt;detector;energy;pedestal;
               upstream-signal;upstream-rms;downstream-signal;downstream-rms
 
-STACK DATA:   run;hv;pmt;detector;energy;pedestal;signal;sig-rms
+BENCHMARK DATA:   run;hv;pmt;detector;energy;pedestal;signal;sig-rms
 
 OTHER DATA:   run;hv;pmt;detector;energy;pedestal;signal;sig-rms
 

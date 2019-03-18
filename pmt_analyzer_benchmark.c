@@ -30,7 +30,7 @@ double poisson_peak_calculator(int n, double mu){
 
 // This function reads the PMT root file from a hard-coded directory and fits the distribution
 // to a Poisson convoluted with some gaussians and an exponential.
-float pmt_analyzer_stack(int runNum, float initialSig = -1.0, int fit_low = 0, int fit_high = 0, int run2 = 0, int run3 = 0, int run4 = 0, int run5 = 0, int run6 = 0, int run7 = 0, int run8 = 0, int run9 = 0, int run10 = 0){
+float pmt_analyzer_benchmark(int runNum, float initialSig = -1.0, int fit_low = 0, int fit_high = 0, int run2 = 0, int run3 = 0, int run4 = 0, int run5 = 0, int run6 = 0, int run7 = 0, int run8 = 0, int run9 = 0, int run10 = 0){
 
 	// Define histogram numbers
 	Int_t binWidth = 1;
@@ -190,14 +190,14 @@ float pmt_analyzer_stack(int runNum, float initialSig = -1.0, int fit_low = 0, i
 	printf("#PEs: %.5f +/- %.5f\n", nPE, sigrmsout / onePEsig);
 	printf("Resolution: %.5f\n", sigrmsout / sigout);
 
-//	ofstream myfile("stack_output.csv", ios::out | ios::app);
+//	ofstream myfile("benchmark_output.csv", ios::out | ios::app);
 //	if (myfile.is_open()) {
 //		myfile << Form("%d,%.2f,%.2f,%.2f,%.6f", runNum, pedout, sigout, nPE, sigrmsout / sigout) << endl;
 //		myfile.close();
 //	}
 
         h_QDC->SetTitle(Form("nPE = %.2f", nPE));
-//	can->Print(Form("stack_%d.png", runNum));
+//	can->Print(Form("benchmark_%d.png", runNum));
 	
 	return nPE;
 }

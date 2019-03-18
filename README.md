@@ -13,15 +13,15 @@ Or, alternately, you can make this change from the command line with:
 
 ---------------------------------------------------------------------------
 
-### The quartz analysis macro pmt_analyzer.c can be called from command line:
- - root -l 'pmt_analyzer.c(177)'
- - root -l 'pmt_analyzer.c(int runNum, float sigSize = -1.0)'
+### The quartz analysis macro pmt_analyzer_showermax.c can be called from command line:
+ - root -l 'pmt_analyzer_showermax.c(177)'
+ - root -l 'pmt_analyzer_showermax.c(int runNum, float sigSize = -1.0)'
  - Using -1.0 as the initial signal size input causes the analysis
    to read in the initial signal value from values_by_run.csv.
 
 ### The analyzer can handle up to 10 input run numbers:
- - root -l 'pmt_analyzer.c(177, 155.5, 178, 179, 180, 181, ...)'
- - root -l 'pmt_analyzer.c(177, -1.0, 178, 179, 180, 181, ...)'
+ - root -l 'pmt_analyzer_showermax.c(177, 155.5, 178, 179, 180, 181, ...)'
+ - root -l 'pmt_analyzer_showermax.c(177, -1.0, 178, 179, 180, 181, ...)'
  - All the data is loaded into a single histogram for the analysis.
  - This functionality introduces a bug somewhere that makes the number
    of events incorrect in the fit display.
@@ -44,13 +44,13 @@ Or, alternately, you can make this change from the command line with:
  - This analyzer also takes in two signal inputs after the first run number.
 
 ### A modified version of the analyzer is required for very large signal runs:
- - root -l 'pmt_analyzer_stack.c(318, -1.0, 1250, 2300)'
- - root -l 'pmt_analyzer_stack.c(int runNum, float initialSig = -1.0, int fit_min = 0, int fit_max = 0)'
+ - root -l 'pmt_analyzer_benchmark.c(318, -1.0, 1250, 2300)'
+ - root -l 'pmt_analyzer_benchmark.c(int runNum, float initialSig = -1.0, int fit_min = 0, int fit_max = 0)'
  - This analyzer performs a simple gaussian fit to the pedestal and a simple gaussian fit 
    to the signal. 
  - The "fit_min" and "fit_max" parameters should encompass the pedestal and first PE peak.
 
-### A modified version of the stack analyzer is used to perform pedestal fits to runs without signal:
+### A modified version of the benchmark analyzer is used to perform pedestal fits to runs without signal:
  - root -l 'pmt_analyzer_pedestal.c(147)'
  - root -l 'pmt_analyzer_pedestal.c(int runNum, float initialPed = -1.0, int fit_min = 0, int fit_max = 0)'
  - This analyzer performs a simple gaussian fit to the pedestal.
@@ -88,7 +88,7 @@ Or, alternately, you can make this change from the command line with:
  - This file makes it possible to get a good fit to all the data runs
    while only needing to enter the run number as input (user-friendly).
  - For tandem runs, the last two values are downstream signal mean and rms.
- - For stack runs with tungsten, the last two values are fit low and high bounds.
+ - For benchmark runs with tungsten, the last two values are fit low and high bounds.
 
 ### signal_by_hv_and_pmt.csv:
  - This file holds the signal size for one PE
