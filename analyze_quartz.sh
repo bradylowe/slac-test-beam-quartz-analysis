@@ -16,8 +16,10 @@ for run_num in ${run_list} ; do
 		continue
 	elif [[ ${detector} == "tandem" ]] ; then
 		root -l "pmt_analyzer_tandem.c(${run_num})"
-	elif [[ ${detector:3:4} == "s" || ${detector:3:4} == "q" ]] ; then 
+	elif [[ ${detector:3:4} == "s" ]] ; then 
 		root -l "pmt_analyzer_benchmark.c(${run_num})"
+	elif [[ ${detector:3:4} == "q" ]] ; then 
+		root -l "pmt_analyzer_showermax.c(${run_num})"
 	else
 		root -l "pmt_analyzer_showermax.c(${run_num})"
 	fi
