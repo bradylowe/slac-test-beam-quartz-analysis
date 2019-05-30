@@ -95,3 +95,7 @@ Or, alternately, you can make this change from the command line with:
    for a given PMT and HV.
  - The signal size for one PE with units channels per PE 
    allows for conversion from channels to PEs.
+
+### single_use_macros:
+ - This directory stores root macros with hard-coded run numbers for creating
+   very specific plots such as a specific configurations lateral scan.
