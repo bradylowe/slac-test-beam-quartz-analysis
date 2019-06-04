@@ -212,6 +212,7 @@ float pmt_analyzer_showermax(int runNum, float initialSig = -1.0, int run2 = 0, 
 	// Print out results and a copy of all inputs to check them
 	//printf("Run: %s\n", rootFile.c_str());
 	printf("Run:  %d\n", runNum);
+	printf("Binwidth:  %d\n", binWidth);
 	printf("Range: %d, %d\n", low, high);
 	printf("HV:  %d\n", hv);
 	printf("PMT: %d\n", pmt);
@@ -229,7 +230,7 @@ float pmt_analyzer_showermax(int runNum, float initialSig = -1.0, int run2 = 0, 
 	double this_pe_mean;
 	for (int i = 0; i < 5; i++) {
 		this_pe_mean = pedout + i * sigout;
-		peak_ratio[i] = h_QDC->Integral(this_pe_mean - integral_width, this_pe_mean + integral_width);
+		peak_ratio[i] = h_QDC->Integral((this_pe_mean - integral_width) / binWidth, (this_pe_mean + integral_width) / binWidth) * ((float) binWidth);
 	}
 	//for (int i = 0; i < 5; i++) { total_integral += peak_ratio[i]; }
 	//for (int i = 0; i < 5; i++) { peak_ratio[i] = peak_ratio[i] / total_integral; }
@@ -240,6 +241,8 @@ float pmt_analyzer_showermax(int runNum, float initialSig = -1.0, int run2 = 0, 
 	printf("2-PE: \t\t\t%.4f, %.4f\n", poisson_peak_calculator(2, muout), peak_ratio[2]);
 	printf("3-PE: \t\t\t%.4f, %.4f\n", poisson_peak_calculator(3, muout), peak_ratio[3]);
 	printf("4-PE: \t\t\t%.4f, %.4f\n", poisson_peak_calculator(4, muout), peak_ratio[4]);
+	printf("------------------------------------------------------\n");
+	printf("Number of 1-electron events: %d\n", peak_ratio[1] * nentries);
 	printf("------------------------------------------------------\n\n");
 
 	printf("### for runs_with_signal.csv\n");
@@ -252,7 +255,8 @@ float pmt_analyzer_showermax(int runNum, float initialSig = -1.0, int run2 = 0, 
 //		myfile.close();
 //	}
 	
-	can->Print(Form("showermax_%d.png", runNum));
+//	can->SetLogy();
+//	can->Print(Form("showermax_%d.png", runNum));
 
 	return nPE;
 }

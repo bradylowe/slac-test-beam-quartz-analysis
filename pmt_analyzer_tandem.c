@@ -166,7 +166,6 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	// Setup histogram for printing
         qdc_upstream->GetXaxis()->SetTitle("ADC channels");
         qdc_upstream->GetYaxis()->SetTitle("Counts (integral normalized)");
-        qdc_upstream->SetTitle("Upstream quartz spectrum");
 	qdc_upstream->SetLineColor(1);
 	qdc_upstream->SetMarkerSize(0.7);
 	qdc_upstream->SetMarkerStyle(20);
@@ -231,6 +230,7 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	mu_upstream = muout;
 
 	// Print out results and a copy of all inputs to check them
+        qdc_upstream->SetTitle(Form("Upstream quartz: %.1f PEs", nPE_upstream));
 	printString = "\n\n=============================\nUPSTREAM ANALYSIS\n---------------------------\n";
 	printString += "Run:  " + std::to_string(runNum) + "\n";
 	printString += "HV:  " + std::to_string(hv) + "\n";
@@ -243,7 +243,7 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	integral_width = sigout / 2.0;
 	for (int i = 0; i < 5; i++) {
 		this_pe_mean = pedout + i * sigout;
-		peak_ratio[i] = qdc_upstream->Integral(this_pe_mean - integral_width, this_pe_mean + integral_width);
+		peak_ratio[i] = qdc_upstream->Integral((this_pe_mean - integral_width) / binWidth, (this_pe_mean + integral_width) / binWidth) * ((float) binWidth);
 	}
 	printString += "\nPE peak contributions:  calculated, measured\n";
 	printString += "------------------------------------------------------\n";
@@ -252,6 +252,8 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	printString += "2-PE: \t\t\t" + std::to_string(poisson_peak_calculator(2, muout)) + ", " + std::to_string(peak_ratio[2]) + "\n";
 	printString += "3-PE: \t\t\t" + std::to_string(poisson_peak_calculator(3, muout)) + ", " + std::to_string(peak_ratio[3]) + "\n";
 	printString += "4-PE: \t\t\t" + std::to_string(poisson_peak_calculator(4, muout)) + ", " + std::to_string(peak_ratio[4]) + "\n";
+	printString += "=====================================\n";
+	printString += "Number of 1-electron events: " + std::to_string((int) (peak_ratio[1] * nentries)) + "\n";
 	printString += "------------------------------------------------------\n";
 
 	//////////////////////////////////////////////////////////////
@@ -400,7 +402,7 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	integral_width = sigout / 2.0;
 	for (int i = 0; i < 5; i++) {
 		this_pe_mean = pedout + i * sigout;
-		peak_ratio[i] = qdc_downstream->Integral(this_pe_mean - integral_width, this_pe_mean + integral_width);
+		peak_ratio[i] = qdc_downstream->Integral((this_pe_mean - integral_width) / binWidth, (this_pe_mean + integral_width) / binWidth) * ((float) binWidth);
 	}
 	printString += "\nPE peak contributions:  calculated, measured\n";
 	printString += "------------------------------------------------------\n";
@@ -409,6 +411,8 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	printString += "2-PE: \t\t\t" + std::to_string(poisson_peak_calculator(2, muout)) + ", " + std::to_string(peak_ratio[2]) + "\n";
 	printString += "3-PE: \t\t\t" + std::to_string(poisson_peak_calculator(3, muout)) + ", " + std::to_string(peak_ratio[3]) + "\n";
 	printString += "4-PE: \t\t\t" + std::to_string(poisson_peak_calculator(4, muout)) + ", " + std::to_string(peak_ratio[4]) + "\n";
+	printString += "=====================================\n";
+	printString += "Number of 1-electron events: " + std::to_string((int) (peak_ratio[1] * nentries)) + "\n";
 	printString += "=====================================\n\n";
 
 	printf("%s", printString.c_str());
@@ -419,6 +423,7 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 //		myfile.close();
 //	}
 
+//        qdc_downstream->SetTitle(Form("Downstream quartz: %.1f PEs", nPE_downstream));
 //	can->Print(Form("tandem_%d.png", runNum));
 
 	return nPE_upstream;
