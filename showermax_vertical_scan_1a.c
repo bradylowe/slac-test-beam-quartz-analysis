@@ -8,6 +8,8 @@ float showermax_vertical_scan_1a(){
 	can->cd();
 	gStyle->SetOptStat(10);
 	gStyle->SetOptFit(1110);
+	TLegend* legend = new TLegend(0.1, 0.7, 0.48, 0.9);
+	legend->SetHeader("Horizontal Position (cm)", "C");
 
 	float res;
 
@@ -49,6 +51,7 @@ float showermax_vertical_scan_1a(){
 	}
 	
 	TGraph* gr1 = new TGraph(num_runs1, pos1, npe1);
+	legend->AddEntry(gr1, "0.0", "p");
 	gr1->SetMarkerColor(1);
 	gr1->SetMarkerStyle(8);
 	mg->Add(gr1);
@@ -77,6 +80,7 @@ float showermax_vertical_scan_1a(){
         }
 
         TGraph* gr2 = new TGraph(num_runs2, pos2, npe2);
+	legend->AddEntry(gr2, "-6.5", "p");
 	gr2->SetMarkerColor(2);
 	gr2->SetMarkerStyle(8);
 	mg->Add(gr2);
@@ -103,6 +107,7 @@ float showermax_vertical_scan_1a(){
         }
 
         TGraph* gr3 = new TGraph(num_runs3, pos3, npe3);
+	legend->AddEntry(gr3, "2.5", "p");
 	gr3->SetMarkerColor(3);
 	gr3->SetMarkerStyle(8);
 	mg->Add(gr3);
@@ -110,6 +115,7 @@ float showermax_vertical_scan_1a(){
 	
 
 	mg->Draw("AP");
+	legend->Draw();
 	
 	return 0.0;
 }
