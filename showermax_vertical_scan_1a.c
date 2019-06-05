@@ -13,19 +13,18 @@ float showermax_vertical_scan_1a(){
 
 	int pmt = 5;
 	int hv;
-	int pedestal = 1297;
 	float sig;
 	float onePEsig;
 	int i;
 
 	TMultiGraph *mg = new TMultiGraph();
-	mg->SetTitle("ShowerMax1A Vertical Scan (5.5 GeV);Vertical Position w.r.t. Run 189 (cm);Detector Response (PEs)");
+	mg->SetTitle("ShowerMax1A Vertical Scan (5.5 GeV);Vertical Position of Beam w.r.t. Run 189 (cm);Detector Response (PEs)");
 
 	// First vertical scan
 	const int num_runs1 = 14;
 	int runs1[num_runs1];
 	float pos1[num_runs1];
-	float all_sig1[num_runs1];
+	float npe1[num_runs1];
 	i=0; runs1[i] = 189; pos1[i] = 0.;
 	i=1; runs1[i] = 190; pos1[i] = pos1[i-1] - 2.;
 	i=2; runs1[i] = 191; pos1[i] = pos1[i-1] - 3.;
@@ -45,19 +44,20 @@ float showermax_vertical_scan_1a(){
 		hv = GetHvFromRun(runs1[j]);
 		onePEsig = GetSignalFromPmtAndHV(pmt, hv);
 		sig = GetSignalFromRun(runs1[j]);
-		all_sig1[j] = ((float)(sig)) / onePEsig;
-		printf("%.1f, %.2f\n", pos1[j], all_sig1[j]);
+		npe1[j] = ((float)(sig)) / onePEsig;
+		//printf("%.1f, %.2f\n", pos1[j], npe1[j]);
 	}
 	
-	TGraph* gr1 = new TGraph(num_runs1, pos1, all_sig1);
+	TGraph* gr1 = new TGraph(num_runs1, pos1, npe1);
 	gr1->SetMarkerColor(1);
+	gr1->SetMarkerStyle(8);
 	mg->Add(gr1);
 
 	// Second vertical scan
 	const int num_runs2 = 9;
 	int runs2[num_runs2];
 	float pos2[num_runs2];
-	float all_sig2[num_runs2];
+	float npe2[num_runs2];
         i=0; runs2[i] = 205; pos2[i] = pos1[num_runs1 - 1];;
         i=1; runs2[i] = 206; pos2[i] = pos2[i-1] + 2.5;
         i=2; runs2[i] = 207; pos2[i] = pos2[i-1] + 0.;
@@ -72,19 +72,20 @@ float showermax_vertical_scan_1a(){
                 hv = GetHvFromRun(runs2[j]);
                 onePEsig = GetSignalFromPmtAndHV(pmt, hv);
                 sig = GetSignalFromRun(runs2[j]);
-                all_sig2[j] = ((float)(sig)) / onePEsig;
-                printf("%.1f, %.2f\n", pos2[j], all_sig2[j]);
+                npe2[j] = ((float)(sig)) / onePEsig;
+                //printf("%.1f, %.2f\n", pos2[j], npe2[j]);
         }
 
-        TGraph* gr2 = new TGraph(num_runs2, pos2, all_sig2);
+        TGraph* gr2 = new TGraph(num_runs2, pos2, npe2);
 	gr2->SetMarkerColor(2);
+	gr2->SetMarkerStyle(8);
 	mg->Add(gr2);
 
 	// Third vertical scan
 	const int num_runs3 = 8;
 	int runs3[num_runs3];
 	float pos3[num_runs3];
-	float all_sig3[num_runs3];
+	float npe3[num_runs3];
         i=0; runs3[i] = 214; pos3[i] = pos2[num_runs2 - 1];
         i=1; runs3[i] = 215; pos3[i] = pos3[i-1] - 2.;
         i=2; runs3[i] = 216; pos3[i] = pos3[i-1] - 3.;
@@ -97,17 +98,18 @@ float showermax_vertical_scan_1a(){
                 hv = GetHvFromRun(runs3[j]);
                 onePEsig = GetSignalFromPmtAndHV(pmt, hv);
                 sig = GetSignalFromRun(runs3[j]);
-                all_sig3[j] = ((float)(sig)) / onePEsig;
-                printf("%.1f, %.2f\n", pos3[j], all_sig3[j]);
+                npe3[j] = ((float)(sig)) / onePEsig;
+                //printf("%.1f, %.2f\n", pos3[j], npe3[j]);
         }
 
-        TGraph* gr3 = new TGraph(num_runs3, pos3, all_sig3);
+        TGraph* gr3 = new TGraph(num_runs3, pos3, npe3);
 	gr3->SetMarkerColor(3);
+	gr3->SetMarkerStyle(8);
 	mg->Add(gr3);
 
 	
 
-	mg->Draw("AP*");
+	mg->Draw("AP");
 	
 	return 0.0;
 }
