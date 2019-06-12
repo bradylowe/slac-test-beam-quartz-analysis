@@ -55,7 +55,9 @@ int GetIntegerFromRun(int run, int index = 1) {
 	return -2;
 }
 
-float GetFloatFromRun(int run, int index = 1) {
+float GetFloatFromRun(int run, int index = 1, int downstream = 0) {
+	// If downstream == 1, then grab the info from the downstream pmt
+	if (downstream == 0) index += 5;
 	// Reading run, hv, and pmt integers from file
 	string runString, valueString;
 	ifstream file;
@@ -128,6 +130,6 @@ int GetHighFromRun(int run) {
 	return GetIntegerFromRun(run, 9);
 }
 
-float GetNpeFromRun(int run) {
-	return GetFloatFromRun(run, 3);
+float GetNpeFromRun(int run, int downstream=0) {
+	return GetFloatFromRun(run, 3, downstream);
 }
