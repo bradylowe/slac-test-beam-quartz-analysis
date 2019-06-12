@@ -44,9 +44,10 @@ float showermax_vertical_scan_1a(){
 
 	for (int j = 0; j < num_runs1; j++) {
 		hv = GetHvFromRun(runs1[j]);
-		onePEsig = GetSignalFromPmtAndHV(pmt, hv);
-		sig = GetSignalFromRun(runs1[j]);
-		npe1[j] = ((float)(sig)) / onePEsig;
+		npe1[j] = GetNpeFromRun(runs1[j]);
+		//onePEsig = GetSignalFromPmtAndHV(pmt, hv);
+		//sig = GetSignalFromRun(runs1[j]);
+		//npe1[j] = ((float)(sig)) / onePEsig;
 		//printf("%.1f, %.2f\n", pos1[j], npe1[j]);
 	}
 	
