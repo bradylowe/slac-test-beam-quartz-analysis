@@ -390,6 +390,7 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 	mu_downstream = muout;
 
 	// Print out results and a copy of all inputs to check them
+        qdc_downstream->SetTitle(Form("Upstream quartz: %.1f PEs", nPE_downstream));
 	printString += "=============================\nDOWNSTREAM ANALYSIS\n---------------------------\n";
 	printString += "Run:  " + std::to_string(runNum) + "\n";
 	printString += "HV:  " + std::to_string(hv) + "\n";
@@ -417,15 +418,18 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 
 	printf("%s", printString.c_str());
 
-//	ofstream myfile("tandem_output.csv", ios::out | ios::app);
-//	if (myfile.is_open()) {
-//		myfile << Form("%d,%.2f,%.2f,%.6f,%.2f,%.6f,%.2f,%.2f,%.6f,%.2f,%.6f", runNum, ped_upstream, sig_upstream, sig_rms_upstream / sig_upstream, nPE_upstream, mu_upstream, ped_downstream, sig_downstream, sig_rms_downstream / sig_downstream, nPE_downstream, mu_downstream) << endl;
-//		myfile.close();
-//	}
+	printf("## For runs_with_signal.csv \n%d,%.2f,%.2f,%.6f,%.2f,%.6f,%.2f,%.2f,%.6f,%.2f,%.6f\n\n", runNum, ped_upstream, sig_upstream, sig_rms_upstream / sig_upstream, nPE_upstream, mu_upstream, ped_downstream, sig_downstream, sig_rms_downstream / sig_downstream, nPE_downstream, mu_downstream);
 
-//        qdc_downstream->SetTitle(Form("Downstream quartz: %.1f PEs", nPE_downstream));
-//	can->Print(Form("tandem_%d.png", runNum));
+/*
+	ofstream myfile("tandem_output.csv", ios::out | ios::app);
+	if (myfile.is_open()) {
+		myfile << Form("%d,%.2f,%.2f,%.6f,%.2f,%.6f,%.2f,%.2f,%.6f,%.2f,%.6f", runNum, ped_upstream, sig_upstream, sig_rms_upstream / sig_upstream, nPE_upstream, mu_upstream, ped_downstream, sig_downstream, sig_rms_downstream / sig_downstream, nPE_downstream, mu_downstream) << endl;
+		myfile.close();
+	}
 
+        qdc_downstream->SetTitle(Form("Downstream quartz: %.1f PEs", nPE_downstream));
+	can->Print(Form("tandem_%d.png", runNum));
+*/
 	return nPE_upstream;
 }
 

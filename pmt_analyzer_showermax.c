@@ -249,14 +249,16 @@ float pmt_analyzer_showermax(int runNum, float initialSig = -1.0, int run2 = 0, 
 	printf("%d,%.2f,%.2f,%.2f,%.6f,%.6f\n\n", runNum, pedout, sigout, nPE, sigrmsout / sigout, muout);
         h_QDC->SetTitle(Form("nPE = %.2f", nPE));
 
-//	ofstream myfile("showermax_output.csv", ios::out | ios::app);
-//	if (myfile.is_open()) {
-//		myfile << Form("%d,%.2f,%.2f,%.2f,%.6f,%.6f", runNum, pedout, sigout, nPE, sigrmsout / sigout, muout) << endl;
-//		myfile.close();
-//	}
+/*
+	ofstream myfile("showermax_output.csv", ios::out | ios::app);
+	if (myfile.is_open()) {
+		myfile << Form("%d,%.2f,%.2f,%.2f,%.6f,%.6f", runNum, pedout, sigout, nPE, sigrmsout / sigout, muout) << endl;
+		myfile.close();
+	}
 	
-//	can->SetLogy();
-//	can->Print(Form("showermax_%d.png", runNum));
+	can->SetLogy();
+	can->Print(Form("showermax_%d.png", runNum));
+*/
 
 	return nPE;
 }
