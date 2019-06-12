@@ -9,7 +9,7 @@ float GetSignalFromPmtAndHV(int pmt, int hv) {
 
 	// Open file and loop
 	ifstream file;
-	file.open("signal_by_hv_and_pmt.csv");
+	file.open("/home/brady/Projects/slac-test-beam-quartz-analysis/signal_by_hv_and_pmt.csv");
 	while (file.good()) {
 		// Check to see if this is the right line
 		getline(file, pmtString, ',');
@@ -33,9 +33,11 @@ int GetIntegerFromRun(int run, int index = 1) {
 	// Reading run, hv, and pmt integers from file
 	string runString, valueString;
 	ifstream file;
-	file.open("values_by_run.csv");
-	// Skip the first 8 lines
-	for (int i = 0; i < 8; i++) getline(file, runString);
+	file.open("/home/brady/Projects/slac-test-beam-quartz-analysis/values_by_run.csv");
+	// Skip the first 7 lines
+	for (int i = 0; i < 7; i++) {
+		getline(file, runString);
+	}
 	while (file.good()) {
 		// Find the right line
 		getline(file, runString, ',');
@@ -46,6 +48,32 @@ int GetIntegerFromRun(int run, int index = 1) {
 			}
 			file.close();
 			return std::stoi(valueString);
+		} else getline(file, valueString);
+	}
+	// If we don't find a value, return -2
+	file.close();
+	return -2;
+}
+
+float GetFloatFromRun(int run, int index = 1) {
+	// Reading run, hv, and pmt integers from file
+	string runString, valueString;
+	ifstream file;
+	file.open("/home/brady/Projects/slac-test-beam-quartz-analysis/runs_with_signal.csv");
+	// Skip the first 7 lines
+	for (int i = 0; i < 7; i++) {
+		getline(file, runString);
+	}
+	while (file.good()) {
+		// Find the right line
+		getline(file, runString, ',');
+		if (runString.compare("") && std::stoi(runString) == run) {
+			// Find the right value in this line
+			for (int i = 0; i < index; i++) {
+				getline(file, valueString, ',');
+			}
+			file.close();
+			return std::stof(valueString);
 		} else getline(file, valueString);
 	}
 	// If we don't find a value, return -2
@@ -98,4 +126,8 @@ int GetLowFromRun(int run) {
 
 int GetHighFromRun(int run) {
 	return GetIntegerFromRun(run, 9);
+}
+
+float GetNpeFromRun(int run) {
+	return GetFloatFromRun(run, 3);
 }
