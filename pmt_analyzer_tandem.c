@@ -418,17 +418,16 @@ float pmt_analyzer_tandem(int runNum, float initialSigUpstream = -1.0, float ini
 
 	printf("%s", printString.c_str());
 
-	printf("## For runs_with_signal.csv \n%d,%.2f,%.2f,%.6f,%.2f,%.6f,%.2f,%.2f,%.6f,%.2f,%.6f\n\n", runNum, ped_upstream, sig_upstream, sig_rms_upstream / sig_upstream, nPE_upstream, mu_upstream, ped_downstream, sig_downstream, sig_rms_downstream / sig_downstream, nPE_downstream, mu_downstream);
+	printf("## For runs_with_signal.csv \n%d,%.2f,%.2f,%.2f,%.6f,%.6f,%.2f,%.2f,%.2f,%.6f,%.6f\n\n", runNum, ped_upstream, sig_upstream, nPE_upstream, sig_rms_upstream / sig_upstream, mu_upstream, ped_downstream, sig_downstream, nPE_downstream, sig_rms_downstream / sig_downstream, mu_downstream);
 
 /*
 	ofstream myfile("tandem_output.csv", ios::out | ios::app);
 	if (myfile.is_open()) {
-		myfile << Form("%d,%.2f,%.2f,%.6f,%.2f,%.6f,%.2f,%.2f,%.6f,%.2f,%.6f", runNum, ped_upstream, sig_upstream, sig_rms_upstream / sig_upstream, nPE_upstream, mu_upstream, ped_downstream, sig_downstream, sig_rms_downstream / sig_downstream, nPE_downstream, mu_downstream) << endl;
+		myfile << Form("%d,%.2f,%.2f,%.2f,%.6f,%.6f,%.2f,%.2f,%.2f,%.6f,%.6f", runNum, ped_upstream, sig_upstream, nPE_upstream, sig_rms_upstream / sig_upstream, mu_upstream, ped_downstream, sig_downstream, nPE_downstream, sig_rms_downstream / sig_downstream, mu_downstream) << endl;
 		myfile.close();
 	}
 
-        qdc_downstream->SetTitle(Form("Downstream quartz: %.1f PEs", nPE_downstream));
-	can->Print(Form("tandem_%d.png", runNum));
+	//can->Print(Form("tandem_%d.png", runNum));
 */
 	return nPE_upstream;
 }
